@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+    <style>
+        body {
+            width: 100%;
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .canvas__wrapper {
+            display: block;
+            /* margin: 0 auto; */
+        }
+        .group__btn {
+            margin: 20px auto 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn {
+            display: block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+            font-size: 18px;
+            cursor: pointer;
+            transition: .3s;
+        }
+        .btn:hover {
+            box-shadow: 0 0 10px 3px rgba(0,0,0,.25);
+        }
+        .btn__blue {
+            background: rgb(0, 101, 202);
+            color: #fff;
+        }
+        .btn__green {
+            background: rgb(0, 202, 47);
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <img style="display: none;" id="photo" src="./test.png" alt="">
+    <canvas class="canvas__wrapper"></canvas>
+    <div class="group__btn">
+        <button onclick="canvasRotate(-90)" class="btn btn__blue">Влево</button>
+        <button onclick="download()" class="btn btn__green">Сохранить</button>
+        <button onclick="canvasRotate(90)" class="btn btn__blue">Вправо</button>
+    </div>
+    <script>
+        let rotation = 0;
+        function draw() {
+            let canvas = document.querySelector('.canvas__wrapper');
+            let ctx = canvas.getContext("2d");
+            let img = document.getElementById("photo"); 
+            if(rotation >= 45 && rotation <= 135 || rotation >= 225 && rotation <= 315 ) { 
+                ctx.canvas.width = img.height;
+                ctx.canvas.height = img.width; 
+            } else {
+                ctx.canvas.width = img.width;
+                ctx.canvas.height = img.height;   
+            }
+            function rotateImg ( context, image, angleInRad ) {
+                
+                if(rotation >= 0 && rotation <= 45) {
+                    context.translate(0, 0)
+                } else if(rotation >= 45 && rotation <= 135) {
+                    context.translate(image.height, 0)
+                } else if(rotation >= 135 && rotation <= 225) {
+                    context.translate(image.width, 0)
+                } else if(rotation >= 225 && rotation <= 315) {
+                    context.translate(0, image.width)             
+                }
+                context.rotate(angleInRad)
+                if(rotation >= 0 && rotation <= 45) {
+                    context.drawImage( image, 0, 0);
+                } else if(rotation >= 45 && rotation <= 135) {
+                    context.drawImage( image, 0, 0);
+                } else if(rotation >= 135 && rotation <= 225) {
+                    context.drawImage( image, 0, -image.height);
+                } else if(rotation >= 225 && rotation <= 315) {
+                    context.drawImage(image, 0, 0)
+                }
+
+               
+                
+            }
+            rotateImg ( ctx, img, rotation*Math.PI/180);
+        };
+        function canvasRotate(angel) {
+            rotation >= 270 ? rotation = 0 : rotation += angel;
+            draw()
+        }
+        
+        function download() {
+            let canvas = document.querySelector('.canvas__wrapper')
+            let data = canvas.toDataURL()
+            var a = document.createElement("a");
+            a.href = data
+            a.download = "Image.png"
+            a.click();
+        }
+
+        window.onload = function() {
+            draw()
+        }
+    </script>
+</body>
+</html>
