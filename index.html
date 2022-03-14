@@ -95,7 +95,7 @@
             rotateImg ( ctx, img, rotation*Math.PI/180);
         };
         function canvasRotate(angel) {
-            rotation >= 270 ? rotation = 0 : rotation += angel;
+            rotation >= 270 || rotation <= 0 ? rotation = 0 : rotation += angel;
             draw()
         }
         
