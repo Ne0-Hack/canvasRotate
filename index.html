@@ -128,8 +128,11 @@
                 blob = canvas.msToBlob();
                 window.navigator.msSaveBlob(blob, 'canvas.png');
             } else { // Для всего остального (вроде)
-                image = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
-                window.location.href = image;
+                let data = canvas.toDataURL()
+                let a = document.createElement("a");
+                a.href = data
+                a.download = "Image.png"
+                a.click();
             }
         }
 
