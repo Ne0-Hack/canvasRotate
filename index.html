@@ -50,9 +50,9 @@
     <img style="display: none;" id="photo" src="./test.png" alt="">
     <canvas class="canvas__wrapper"></canvas>
     <div class="group__btn">
-        <button onclick="canvasRotate(-90)" class="btn btn__blue">Влево</button>
+        <button onclick="canvasRotateLeft()" class="btn btn__blue">Влево</button>
         <button onclick="download()" class="btn btn__green">Сохранить</button>
-        <button onclick="canvasRotate(90)" class="btn btn__blue">Вправо</button>
+        <button onclick="canvasRotateRight()" class="btn btn__blue">Вправо</button>
     </div>
     <script>
         let rotation = 0;
@@ -94,17 +94,40 @@
             }
             rotateImg ( ctx, img, rotation*Math.PI/180);
         };
-        function canvasRotate(angel) {
-            rotation >= 270 ? rotation = 0 : rotation += angel;
+        function canvasRotateLeft() {
+            if(rotation == 0) {
+                rotation = 270
+            } else if(rotation == 270) {
+                rotation = 180
+            } else if(rotation == 180) {
+                rotation = 90
+            } else{
+                rotation = 0
+            }
             draw()
         }
-        
+        function canvasRotateRight() {
+            if(rotation == 0) {
+                console.log('asd 1')
+                rotation = 90
+            } else if(rotation == 90) {
+                console.log('asd 2')
+                rotation = 180
+            } else if(rotation == 180) {
+                rotation = 270
+            } else {
+                rotation = 0
+            }
+            draw()
+        }
+
+
         function download() {
             let canvas = document.querySelector('.canvas__wrapper')
             if (canvas.msToBlob) { // IE
                 blob = canvas.msToBlob();
                 window.navigator.msSaveBlob(blob, 'canvas.png');
-            } else { // CH, FF
+            } else { // Для всего остального (вроде)
                 image = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
                 window.location.href = image;
             }
