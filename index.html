@@ -101,11 +101,13 @@
         
         function download() {
             let canvas = document.querySelector('.canvas__wrapper')
-            let data = canvas.toDataURL()
-            var a = document.createElement("a");
-            a.href = data
-            a.download = "Image.png"
-            a.click();
+            if (canvas.msToBlob) { // IE
+                blob = canvas.msToBlob();
+                window.navigator.msSaveBlob(blob, 'canvas.png');
+            } else { // CH, FF
+                image = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
+                window.location.href = image;
+            }
         }
 
         window.onload = function() {
